@@ -302,6 +302,10 @@
 	Sortable.prototype = /** @lends Sortable.prototype */ {
 		constructor: Sortable,
 
+		setDisable: function(v) {
+			window.disableSortable = v;
+		},
+
 		_onTapStart: function (/** Event|TouchEvent */evt) {
 			var _this = this,
 				el = this.el,
@@ -384,6 +388,10 @@
 				ownerDocument = el.ownerDocument,
 				dragStartFn;
 
+			if(window.disableSortable) {
+				return;
+			}
+
 			if (target && !dragEl && (target.parentNode === el)) {
 				tapEvt = evt;
 
@@ -404,6 +412,10 @@
 					// Delayed drag has been triggered
 					// we can re-enable the events: touchmove/mousemove
 					_this._disableDelayedDrag();
+
+					if(window.disableSortable) {
+						return;
+					}
 
 					// Make the element draggable
 					dragEl.draggable = _this.nativeDraggable;
